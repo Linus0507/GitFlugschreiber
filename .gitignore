@@ -13,3 +13,4 @@ obj/
 # Projektdateien (wenn du bewusst versionieren willst, auskommentieren)
 *.sln
 *.csproj.user
+*.csproj

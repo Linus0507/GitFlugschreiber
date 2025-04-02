@@ -4,7 +4,7 @@ using System.Text.Json;
 
 public static class CalibrationStorage
 {
-    private const string FilePath = "FlugschreiberArduinoProject/calibration.json";
+    private const string FilePath = "calibration.json";
 
     public static CalibrationData Load()
     {
