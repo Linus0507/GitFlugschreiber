@@ -1,0 +1,15 @@
+# Build-Ordner
+bin/
+obj/
+
+# VS Code
+.vscode/
+
+# Nutzerdateien
+*.user
+*.suo
+*.log
+
+# Projektdateien (wenn du bewusst versionieren willst, auskommentieren)
+*.sln
+*.csproj.user
