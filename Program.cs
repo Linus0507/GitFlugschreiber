@@ -11,8 +11,6 @@ class Programm    //Klassen müssen existieren, ansonsten klappt in Csharp gar n
 
     static void Main()
     {
-        
-
         calibration = CalibrationStorage.Load();
 
         using ReadUSBPort usbReader = new ReadUSBPort();
@@ -20,12 +18,7 @@ class Programm    //Klassen müssen existieren, ansonsten klappt in Csharp gar n
         var connectedSensors = SensorDiscovery.DiscoverConnectedSensors(usbReader);
 
         StartingProtocol(connectedSensors, usbReader);
-
     }
-
-
-
-
 
     static void StartingProtocol(HashSet<SensorID> connectedSensors, ReadUSBPort usbReader)
     {
