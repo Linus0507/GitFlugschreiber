@@ -10,7 +10,7 @@ public static class ALLPROTOCOL
         Console.WriteLine("📡 Starte ALLPROTOCOL – alle Sensoren gleichzeitig überwachen");
         Console.WriteLine("Beenden mit 'q'\n");
 
-        var interpreters = new Dictionary<SensorID, object>
+        var interpreters = new Dictionary<SensorID, ISensorInterpreter>
         {
             { SensorID.ADXL345, new Adxl345Interpreter(calibration) }
         };
@@ -23,7 +23,7 @@ public static class ALLPROTOCOL
         foreach (var kvp in interpreters)
         {
             SensorID sensorId = kvp.Key;
-            var interpreter = (Adxl345Interpreter)kvp.Value;
+            var interpreter = kvp.Value;
 
             var task = Task.Run(() =>
             {

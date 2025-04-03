@@ -45,6 +45,11 @@ public class ReadUSBPort : IDisposable
 
 public static class SensorUtils
 {
+    public static string GetSensorIdentifier(SensorID id)
+    {
+        return ((int)id).ToString();
+    }
+
     public static Func<string?> CreateSensorReader(ReadUSBPort usbReader, string targetId)
     {
         return () =>
@@ -54,8 +59,10 @@ public static class SensorUtils
                 string? data = usbReader.ReadData();
                 if (string.IsNullOrEmpty(data)) return null;
 
-                string IDent = data.Substring(0, 1);
-                string sensorData = data.Substring(1);
+                int i = 0;
+                while (i < data.Length && char.IsDigit(data[i])) i++;
+                string IDent = data.Substring(0, i);
+                string sensorData = data.Substring(i);
 
                 if (IDent == targetId)
                     return sensorData;
@@ -67,10 +74,18 @@ public static class SensorUtils
 public enum SensorID
 {
     ADXL345 = 1,
+    BMP180 = 2,
     // Hier kannst du später weitere Sensoren ergänzen:
     // Gyroskop = 2,
     // Magnetometer = 3,
 }
+
+public static class SensorConfig
+{
+    public static readonly List<string> SensorsWOCali = new List<string> { "BMP180" };
+}
+
+
 
 public static class SensorDiscovery
 {
@@ -86,10 +101,11 @@ public static class SensorDiscovery
             string? data = usbReader.ReadData();
             if (string.IsNullOrEmpty(data)) continue;
 
-            string id = data.Substring(0, 1);
+            int i = 0;
+            while (i < data.Length && char.IsDigit(data[i])) i++;
+            string id = data.Substring(0, i);
 
-            if (int.TryParse(id, out int numericId) &&
-                Enum.IsDefined(typeof(SensorID), numericId))
+            if (int.TryParse(id, out int numericId) && Enum.IsDefined(typeof(SensorID), numericId))
             {
                 var sensorId = (SensorID)numericId;
                 if (foundSensors.Add(sensorId))
@@ -106,4 +122,9 @@ public static class SensorDiscovery
 
         return foundSensors;
     }
+}
+
+public interface ISensorInterpreter
+{
+    void StartLiveInterpretation(ReadUSBPort usbReader, SensorID sensor, CancellationToken token);
 }

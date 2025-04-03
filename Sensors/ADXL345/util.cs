@@ -1,9 +1,9 @@
 using System;
 using System.Globalization;
 
-public static class SensorParser
+public static class Adxl345Parser
 {
-    public static bool TryParseXYZ(string sensorData, out double x, out double y, out double z)
+    public static bool TryParse(string sensorData, out double x, out double y, out double z)
     {
         x = y = z = 0;
 
@@ -22,3 +22,4 @@ public static class SensorParser
                double.TryParse(rawZ, NumberStyles.Any, CultureInfo.InvariantCulture, out z);
     }
 }
+

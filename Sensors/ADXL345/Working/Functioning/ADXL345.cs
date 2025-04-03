@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 // Diese Klasse wertet ADXL345 Sensordaten aus und berechnet G-Werte, Winkel und Orientierung
-public class Adxl345Interpreter
+public class Adxl345Interpreter : ISensorInterpreter
 {
     private CalibrationData? calibration;          // Kalibrierdaten (Min, Max, Zero) aus der Kalibrierung
     private AngleOffsets angleOffsets;            // Winkel-Offsets für "korrigierte Winkel"
@@ -21,12 +21,16 @@ public class Adxl345Interpreter
     // Die Kalibrierung erfolgt linear mit Bezug auf Min/Max/Zero-Werte
     public GVector GetGValues(double rawX, double rawY, double rawZ)
     {
+        if (calibration == null)
+            throw new InvalidOperationException("Kalibrierdaten fehlen. Ohne die geht's nicht weiter.");
+
         return new GVector
         {
             X = CalibrateAxis(rawX, calibration.XMin, calibration.XMax, calibration.ZeroX),
             Y = CalibrateAxis(rawY, calibration.YMin, calibration.YMax, calibration.ZeroY),
             Z = CalibrateAxis(rawZ, calibration.ZMin, calibration.ZMax, calibration.ZeroZ)
         };
+
     }
 
     // Berechnet einfache Winkel (in Grad) aus G-Werten mittels arcsin
@@ -121,7 +125,7 @@ public class Adxl345Interpreter
             string? sensorData = reader();
             if (string.IsNullOrEmpty(sensorData)) continue;
 
-            if (!SensorParser.TryParseXYZ(sensorData, out double x, out double y, out double z)) continue;
+            if (!Adxl345Parser.TryParse(sensorData, out double x, out double y, out double z)) continue;
 
             var g = GetGValues(x, y, z);
             var tilt = GetTiltAngles(g);
