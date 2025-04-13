@@ -27,7 +27,7 @@ public class CurrentValues
 
     private void ShowLive(string sensorData)
     {
-        if (SensorParser.TryParseXYZ(sensorData, out double x, out double y, out double z))
+        if (Adxl345Parser.TryParse(sensorData, out double x, out double y, out double z))
         {
             Console.WriteLine($"📈 X: {x}, Y: {y}, Z: {z}");
         }

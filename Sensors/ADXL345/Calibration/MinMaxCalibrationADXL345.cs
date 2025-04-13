@@ -49,7 +49,7 @@ public class MinMaxCalibrationADXL345
 
     private void ShowLive(string sensorData)
     {
-        if (SensorParser.TryParseXYZ(sensorData, out double x, out double y, out double z))
+        if (Adxl345Parser.TryParse(sensorData, out double x, out double y, out double z))
         {
             Console.WriteLine($"📈 X: {x}, Y: {y}, Z: {z}");
         }
@@ -57,7 +57,7 @@ public class MinMaxCalibrationADXL345
 
     private void SaveMeasurement(string key, string sensorData)
     {
-        if (!SensorParser.TryParseXYZ(sensorData, out double x, out double y, out double z))
+        if (!Adxl345Parser.TryParse(sensorData, out double x, out double y, out double z))
         {
             Console.WriteLine($"⚠️ Fehler beim Parsen – {key.ToUpper()} nicht gespeichert.");
             return;

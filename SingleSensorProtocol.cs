@@ -26,9 +26,6 @@ public static class SingleSensor
                 case SensorID.ADXL345:
                     ShowCurrentValuesADXL345(usbReader, selectedSensor);
                     break;
-                case SensorID.BMP180:
-                    showBMP180(usbReader, selectedSensor);
-                    break;
 
                 default:
                     break;
@@ -49,14 +46,4 @@ public static class SingleSensor
         var currentValues = new CurrentValues();
         currentValues.show(reader);
     }
-
-    static void showBMP180(ReadUSBPort usbReader, SensorID sensor)
-    {
-        Console.WriteLine("Beenden durch 'q'");
-
-        var reader = SensorUtils.CreateSensorReader(usbReader, ((int)sensor).ToString());
-        var currentValues = new ListenBMP180();
-        currentValues.showBMP180(reader);
-    }
-
 }
